@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function checkIfAllElementsRendered() {
+            const elements = Array.from(document.querySelectorAll('*'));
+
+            function checkRendered() {
+                let allRendered = elements.every((element) => {
+                    const { display, visibility, opacity } = window.getComputedStyle(element);
+                    return display !== 'none' && visibility !== 'hidden' && opacity !== '0';
+                });
+
+                if (allRendered) {
+                    console.log('LCP');
+                } else {
+                    requestAnimationFrame(checkRendered);
+                }
+            }
+
+            checkRendered();
+
+            const observer = new MutationObserver(() => {
+                requestAnimationFrame(checkRendered);
+            });
+            observer.observe(document.body, { subtree: true, childList: true });
+        }
+
+        checkIfAllElementsRendered();
+    </script>
+</body>
+
+</html>

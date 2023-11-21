@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observer + Request animation frame . . .</title>
+</head>
+
+<body>
+    <script>
+        let observer;
+
+        function isElementVisible(element) {
+            return (
+                element.offsetParent !== null &&
+                element.getClientRects().length > 0 &&
+                window.getComputedStyle(element).display !== 'none'
+            );
+        }
+
+        function observeElementsVisibility() {
+            const allElements = document.getElementsByTagName('*');
+            const totalElementCount = allElements.length;
+
+            const visibleElements = new Set();
+
+            function checkForNewVisibleElements() {
+                for (let i = 0; i < totalElementCount; i++) {
+                    const element = allElements[i];
+                    if (isElementVisible(element) && !visibleElements.has(element)) {
+                        visibleElements.add(element);
+                        console.log('New visible element ');
+                    }
+                }
+
+                if (visibleElements.size === totalElementCount) {
+                    console.log('CPL');
+                }
+
+                requestAnimationFrame(checkForNewVisibleElements);
+            }
+
+            checkForNewVisibleElements();
+
+            // Observer 
+            observer = new MutationObserver(() => {
+                checkForNewVisibleElements();
+            });
+
+            const observerConfig = {
+                childList: true,
+                subtree: true
+            };
+
+            observer.observe(document.body, observerConfig);
+        }
+
+        observeElementsVisibility();
+    </script>
+</body>
+
+</html>

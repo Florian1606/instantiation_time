@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display & rendered</title>
+</head>
+
+<body>
+    <script>
+        let numberOfElements = getVisibleElementsCount();
+
+        function getVisibleElementsCount() {
+            const allElements = document.getElementsByTagName('*');
+            let count = 0;
+
+            for (let i = 0; i < allElements.length; i++) {
+                const element = allElements[i];
+                const isVisible = isElementVisible(element);
+
+                if (isVisible) {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        function isElementVisible(element) {
+            return (
+                element.offsetParent !== null &&
+                element.getClientRects().length > 0 &&
+                window.getComputedStyle(element).display !== 'none'
+            );
+        }
+
+        function checkForNewVisibleElements() {
+
+
+            const currentNumberOfElements = getVisibleElementsCount();
+
+            if (currentNumberOfElements !== numberOfElements) {
+                console.log('New visible elements detected!');
+                numberOfElements = currentNumberOfElements;
+            } else {
+                // no new visible elements 
+            }
+        }
+
+        checkForNewVisibleElements();
+    </script>
+</body>
+
+</html>

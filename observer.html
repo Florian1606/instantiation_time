@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observer</title>
+</head>
+
+<body>
+    <script>
+        const observer = new MutationObserver((mutationsList, observer) => {
+            for (let mutation of mutationsList) {
+                if (mutation.type === 'childList') {
+                    console.log('upd detected');
+                }
+            }
+        });
+
+        const observerConfig = {
+            childList: true,
+            subtree: true
+        };
+
+        observer.observe(document.body, observerConfig);
+
+        // observer.disconnect();
+
+    </script>
+</body>
+
+</html>
